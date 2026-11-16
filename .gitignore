@@ -1,0 +1,7 @@
+eml/
+cookies/
+*.txt
+!*.md
+__pycache__/
+*.part
+*.log
