@@ -2,6 +2,7 @@
 
 Экспорт почты Mail.ru в `.eml` / `.mbox` **без доступа по IMAP** и без
 платной подписки — через серверную «лёгкую» веб-версию `light.mail.ru`.
+Плюс загрузка готовой выгрузки на любой IMAP-сервер (миграция/бекап).
 
 ## Когда это нужно
 
@@ -76,6 +77,10 @@ light-dump/
 ├── light_dump.py   # выгрузка .eml (вход, папки, пагинация, resume)
 ├── build_mbox.py   # упаковка .eml -> .mbox по папкам
 ├── dump.sh         # обёртка: ./dump.sh <login> [out]
+└── README.md
+imap-upload/
+├── imap_upload.py  # загрузка выгрузки на IMAP-сервер (папки, APPEND, resume)
+├── upload.sh       # обёртка: ./upload.sh <src> <host> <login> <pass>
 └── README.md
 ```
 
