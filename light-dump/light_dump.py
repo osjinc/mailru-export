@@ -46,6 +46,7 @@ CUSTOM_FOLDER_RE = re.compile(r'href="/messages/folder/(\d+)')
 
 class MailClient:
     def __init__(self, cookie_path):
+        self.cookie_path = cookie_path
         self.jar = http.cookiejar.MozillaCookieJar(cookie_path)
         self.opener = urllib.request.build_opener(
             urllib.request.HTTPCookieProcessor(self.jar))
@@ -66,7 +67,9 @@ class MailClient:
 
     def logged_in(self):
         st, ct, body = self.get("https://light.mail.ru/messages/inbox")
-        return st == 200 and b"logout" in body
+        i = body.find(b"<title>")
+        title = body[i:i + 200] if i >= 0 else b""
+        return st == 200 and b"\xd0\x9f\xd0\xbe\xd1\x87\xd1\x82\xd0\xb0" in title
 
     def login(self, login, password):
         data = urllib.parse.urlencode({
@@ -87,7 +90,7 @@ class MailClient:
             loc = e.headers.get("Location", "")
         if "fail=1" in loc:
             raise SystemExit("Не удалось войти: неверный логин/пароль или капча (%s)" % loc)
-        self.jar.save(cookie_path, ignore_discard=True, ignore_expires=True)
+        self.jar.save(self.cookie_path, ignore_discard=True, ignore_expires=True)
 
     def discover_folders(self):
         """Возвращает список (slug, fid_or_None) из сайдбара light-интерфейса."""
